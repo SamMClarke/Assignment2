@@ -51,7 +51,7 @@ public class TagManager
         PlayerNode current = gameFront;
         while (current != null)
         {
-            if (current.name.toLowerCase().equals(name.toLowerCase()))
+            if (current.name.equalsIgnoreCase(name))
             {
                 return true;
             }
@@ -65,7 +65,7 @@ public class TagManager
         PlayerNode current = historyFront;
         while (current != null)
         {
-            if (current.name.toLowerCase().equals(name.toLowerCase()))
+            if (current.name.equalsIgnoreCase(name))
             {
                 return true;
             }
@@ -103,6 +103,32 @@ public class TagManager
             throw new IllegalArgumentException("The person " + name + " is not playing the game");
         }
 
+        PlayerNode currentGame = gameFront;
+        PlayerNode currentHistory = historyFront;
         
+        while (currentGame != null)
+        {
+            if (gameFront.name.equalsIgnoreCase(name) && currentGame.next == null)
+            {
+                //remove front
+                gameFront.tagger = currentGame.name;
+                currentHistory = gameFront;
+                gameFront = gameFront.next;
+                currentHistory.next = historyFront;
+                historyFront = currentHistory;
+                break;
+            }
+            else if (currentGame.next.name.equalsIgnoreCase(name))
+            {
+                //remove next
+                currentGame.next.tagger = currentGame.name;
+                currentHistory = currentGame.next;
+                currentGame.next = currentGame.next.next;
+                currentHistory.next = historyFront;
+                historyFront = currentHistory;
+                break;
+            }
+            currentGame = currentGame.next;
+        }
     }
 }

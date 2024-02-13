@@ -50,48 +50,41 @@ public class TagMain {
         
         TagManager manager = new TagManager(nameList);
 
-        manager.printGameRing();
+        // prompt the user for people until the game is over
+        Scanner console = new Scanner(System.in);
+        while (!manager.isGameOver()) {
+            oneTag(console, manager);
+        }
+
+        // report who won
+        System.out.println("Game was won by " + manager.winner());
+        System.out.println("Final history is as follows:");
         manager.printHistory();
-        System.out.println(manager.gameRingContains("Tad Martin"));
-        System.out.println(manager.historyContains("Tad Martin"));
-        System.out.println("Over: " + manager.isGameOver());
-        System.out.println("Winner: " + manager.winner());
+    }
 
-    //     // prompt the user for people until the game is over
-    //     Scanner console = new Scanner(System.in);
-    //     while (!manager.isGameOver()) {
-    //         oneTag(console, manager);
-    //     }
-
-    //     // report who won
-    //     System.out.println("Game was won by " + manager.winner());
-    //     System.out.println("Final history is as follows:");
-    //     manager.printHistory();
-    // }
-
-    // /** Handles the details of recording one person.  Shows the current game
-    //     ring and history to the user, prompts for a name and records the
-    //     tag if the name is legal. */
-    // public static void oneTag(Scanner console, TagManager manager) {
-    //     // print both linked lists
-    //     System.out.println("Current game ring:");
-    //     manager.printGameRing();
-    //     System.out.println("Current history:");
-    //     manager.printHistory();
+    /** Handles the details of recording one person.  Shows the current game
+        ring and history to the user, prompts for a name and records the
+        tag if the name is legal. */
+    public static void oneTag(Scanner console, TagManager manager) {
+        // print both linked lists
+        System.out.println("Current game ring:");
+        manager.printGameRing();
+        System.out.println("Current history:");
+        manager.printHistory();
         
-    //     // prompt for next person to tag
-    //     System.out.println();
-    //     System.out.print("next person? ");
-    //     String name = console.nextLine().trim();
+        // prompt for next person to tag
+        System.out.println();
+        System.out.print("next person? ");
+        String name = console.nextLine().trim();
         
-    //     // tag the person, if possible
-    //     if (manager.historyContains(name)) {
-    //         System.out.println(name + " is already out.");
-    //     } else if (!manager.gameRingContains(name)) {
-    //         System.out.println("Unknown person.");
-    //     } else {
-    //         manager.tag(name);
-    //     }
-    //     System.out.println();
+        // tag the person, if possible
+        if (manager.historyContains(name)) {
+            System.out.println(name + " is already out.");
+        } else if (!manager.gameRingContains(name)) {
+            System.out.println("Unknown person.");
+        } else {
+            manager.tag(name);
+        }
+        System.out.println();
     }
 }
