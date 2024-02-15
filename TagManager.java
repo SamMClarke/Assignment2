@@ -1,9 +1,26 @@
+/*
+Authors: Sam Clarke
+Date: 2/15/2024
+Class: CS 145
+Assignment: Assignment #2: Tag
+File: TagManager.java
+Source: Deitel / Deitel
+Purpose: Manages a game of tag created by the user, keeping track of the current game and history.
+*/
+
 import java.util.*;
 
 public class TagManager
 {
     private PlayerNode gameFront;
     private PlayerNode historyFront;
+
+    /**
+     * Initializes a new Tag game manager.
+     *
+     * @param names The list of the names of players that are playing the game.
+     * @throws IllegalArgumentException If the list of names is either empty or null.
+     */
 
     public TagManager(List<String> names)
     {
@@ -22,6 +39,11 @@ public class TagManager
         }
     }
 
+    /**
+     * Prints out the current game ring.
+     *
+     */
+
     public void printGameRing()
     {
         PlayerNode current = gameFront;
@@ -32,6 +54,11 @@ public class TagManager
         }
         System.out.println("  " + current.name + "is trying to tag " + gameFront.name);
     }
+
+    /**
+     * Prints out the current history.
+     *
+     */
 
     public void printHistory()
     {
@@ -46,12 +73,19 @@ public class TagManager
         }
     }
 
+    /**
+     * Checks if a given name is in the current game ring.
+     *
+     * @param name The name of the person to check for.
+     * @return A boolean: true if the person does exist, false otherwise.
+     */
+
     public boolean gameRingContains(String name)
     {
         PlayerNode current = gameFront;
         while (current != null)
         {
-            if (current.name.equalsIgnoreCase(name))
+            if (current.name.equalsIgnoreCase(name)) //equalsIgnoreCase checks if string are equal ignoring any case differences
             {
                 return true;
             }
@@ -59,6 +93,13 @@ public class TagManager
         }
         return false;
     }
+
+    /**
+     * Checks if a given name is in the current history.
+     *
+     * @param name The name of the person to check for.
+     * @return A boolean: true if the person does exist, false otherwise.
+     */
 
     public boolean historyContains(String name)
     {
@@ -74,6 +115,12 @@ public class TagManager
         return false;
     }
 
+    /**
+     * Checks if the game is over (i.e only one person in the game ring).
+     *
+     * @return A boolean: true if only one person exists in the game ring, false otherwise.
+     */
+
     public boolean isGameOver()
     {
         if (gameFront.next == null)
@@ -82,6 +129,12 @@ public class TagManager
         }
         return false;
     }
+    
+    /**
+     * Returns the name of the last person in the game ring (the winner).
+     *
+     * @return The name of the person who won.
+     */
 
     public String winner()
     {
@@ -91,6 +144,14 @@ public class TagManager
         }
         return null;
     }
+
+    /**
+     * Tags a given player, removing them from the game ring and adding them to the history.
+     *
+     * @param name The name of the person to remove.
+     * @throws IllegalStateException If the game is already over.
+     * @throws IllegalArgumentException If the given person is not playing the game.
+     */
 
     public void tag(String name)
     {
@@ -110,22 +171,22 @@ public class TagManager
         {
             if (gameFront.name.equalsIgnoreCase(name) && currentGame.next == null)
             {
-                //remove front
-                gameFront.tagger = currentGame.name;
-                currentHistory = gameFront;
-                gameFront = gameFront.next;
-                currentHistory.next = historyFront;
-                historyFront = currentHistory;
+                //Remove the person from the front of the game ring.
+                gameFront.tagger = currentGame.name; //Sets the tagger field.
+                currentHistory = gameFront; //Sets the current history to the person in the front
+                gameFront = gameFront.next; //Sets the game front to the second person in the game.
+                currentHistory.next = historyFront; //Points the current history to the rest of the history.
+                historyFront = currentHistory; //Sets the history front to the new front of the current history.
                 break;
             }
             else if (currentGame.next.name.equalsIgnoreCase(name))
             {
-                //remove next
-                currentGame.next.tagger = currentGame.name;
-                currentHistory = currentGame.next;
-                currentGame.next = currentGame.next.next;
-                currentHistory.next = historyFront;
-                historyFront = currentHistory;
+                //Removes the next person from the game ring.
+                currentGame.next.tagger = currentGame.name; //Sets the tagger field.
+                currentHistory = currentGame.next; //Sets the current hisotry to the next person in the game.
+                currentGame.next = currentGame.next.next; //Skips (jumps over) the person to be tagged.
+                currentHistory.next = historyFront; //Points the current history to the rest of the history.
+                historyFront = currentHistory; //Sets the history front to the new front of the current history
                 break;
             }
             currentGame = currentGame.next;
